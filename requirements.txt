@@ -1,6 +1,12 @@
 # Core 
 numpy
-requests
 
 # Faiss
 faiss-cpu
+
+# Open Source embeddings 
+sentence-transformers
+
+# Llama-Index
+llama-index
+llama-index-vector-stores-faiss
