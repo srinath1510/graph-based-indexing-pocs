@@ -1,0 +1,6 @@
+# Core 
+numpy
+requests
+
+# Faiss
+faiss-cpu
