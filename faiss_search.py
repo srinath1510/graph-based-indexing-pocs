@@ -126,7 +126,7 @@ class FaissSearch:
         
         print(f"Index built successfully. Total vectors: {self.faiss_index.ntotal}")
         
-    def query(self, query_text: str, top_k: int = 5) -> List[dict]:
+    def query(self, query_text: str, top_k: int = 5):
         """
         Query the FAISS index
         
@@ -142,22 +142,26 @@ class FaissSearch:
         
         print(f"\nQuerying: '{query_text}'")
         
-        # Create query engine
-        query_engine = self.index.as_query_engine(similarity_top_k=top_k)
+        # # Create query engine
+        # query_engine = self.index.as_query_engine(similarity_top_k=top_k)
         
-        # Execute query
-        response = query_engine.query(query_text)
+        # # Execute query
+        # response = query_engine.query(query_text)
+
+        # just retrieve chunks - no LLM required 
+        retriever = self.index.as_retriever(similarity_top_k=top_k)
+        nodes = retriever.retrieve(query_text)
         
         # Extract results
         results = []
-        for node in response.source_nodes:
+        for node in nodes:
             results.append({
                 "text": node.node.text,
                 "score": node.score,
                 "metadata": node.node.metadata
             })
         
-        return results, response
+        return results
     
     def save_index(self, persist_dir: str = "./faiss_storage"):
         """
@@ -258,10 +262,9 @@ def main():
     print("="*80)
 
     for query in queries:
-        results, response = faiss_instance.query(query, top_k=3)
+        results = faiss_instance.query(query, top_k=3)
         
         print(f"\nQuery: {query}")
-        print(f"\nResponse: {response}")
         print("\nTop matching chunks:")
         
         for i, result in enumerate(results, 1):
