@@ -10,3 +10,4 @@ sentence-transformers
 # Llama-Index
 llama-index
 llama-index-vector-stores-faiss
+llama-index-embeddings-huggingface
